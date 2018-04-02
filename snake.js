@@ -1,23 +1,32 @@
-function Snake() {
-  this.loc = {};
-  this.loc.x = Math.floor(cols / 4);
-  this.loc.y = Math.floor(rows / 4);
-  this.xSpeed = 1;
-  this.ySpeed = 0;
-  this.lastXSpeed = this.xSpeed;
-  this.lastYSpeed = this.ySpeed;
-  this.tail = [];
+class Snake {
+  constructor(paper, cols, rows, cell) {
+    this.paper = paper;
+    this.cols = cols;
+    this.rows = rows;
+    this.cell = cell;
+    this.startX = Math.floor(this.cols / 4);
+    this.startY = Math.floor(this.rows / 4);
+    this.loc = {};
+    this.loc.x = this.startX;
+    this.loc.y = this.startY;
+    this.xSpeed = 1;
+    this.ySpeed = 0;
+    this.lastXSpeed = this.xSpeed;
+    this.lastYSpeed = this.ySpeed;
+    this.tail = [];
+  }
 
-  this.show = function() {
-    paper.rect(this.loc.x * cellSize, this.loc.y * cellSize, cellSize, cellSize, 3)
+  show() {
+    var self = this;
+    self.paper.rect(self.loc.x * self.cell, self.loc.y * self.cell, self.cell, self.cell, 3)
         .attr('stroke-width', 0).attr('fill', '#ddd');
-    this.tail.forEach(function(point) {
-      paper.rect(point.x * cellSize, point.y * cellSize, cellSize, cellSize, 3)
+    self.tail.forEach(function(point) {
+      self.paper.rect(point.x * self.cell, point.y * self.cell, self.cell, self.cell, 3)
           .attr('stroke-width', 0).attr('fill', '#fff');
     })
   }
 
-  this.run = function(foodLoc) {
+  run() {
     var self = this;
     // update tail
     self.tail.unshift({x: self.loc.x, y: self.loc.y});
@@ -30,9 +39,12 @@ function Snake() {
     // update last speeds
     self.lastXSpeed = self.xSpeed;
     self.lastYSpeed = self.ySpeed;
+  }
 
+  isDead() {
+    var self = this;
     // handle cliffs
-    if(self.loc.x < 0 || self.loc.x > cols || self.loc.y < 0 || self.loc.y > rows) {
+    if(self.loc.x < 0 || self.loc.x > self.cols || self.loc.y < 0 || self.loc.y > self.rows) {
       self.reset();
       return true;
     }
@@ -44,48 +56,50 @@ function Snake() {
       self.reset();
       return true;
     }
+  }
 
-
+  isFed(foodLoc) {
+    var self = this;
     // handle eating
     if(self.loc.x === foodLoc.x && self.loc.y === foodLoc.y) {
       self.tail.unshift({x: self.loc.x, y: self.loc.y});
       return true;
     }
-    return false;
   }
 
-  this.left = function() {
+  left() {
     if(this.lastXSpeed !== 1) {
       this.xSpeed = -1;
       this.ySpeed = 0;
     }
   }
 
-  this.up = function() {
+  up() {
     if(this.lastYSpeed !== 1) {
       this.xSpeed = 0;
       this.ySpeed = -1;
     }
   }
 
-  this.right = function() {
+  right() {
     if(this.lastXSpeed !== -1) {
       this.xSpeed = 1;
       this.ySpeed = 0;
     }
   }
 
-  this.down = function() {
+  down() {
     if(this.lastYSpeed !== -1) {
       this.xSpeed = 0;
       this.ySpeed = 1;
     }
   }
 
-  this.reset = function() {
+  reset() {
     this.tail = [];
-    this.loc.x = Math.floor(cols / 4);
-    this.loc.y = Math.floor(rows / 4);
-    paused = true;
+    this.loc.x = this.startX;
+    this.loc.y = this.startY;
+    this.xSpeed = 1;
+    this.ySpeed = 0;
   }
 }
