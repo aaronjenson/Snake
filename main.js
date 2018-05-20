@@ -12,15 +12,19 @@ window.onkeydown = function(ev) {
     case 32:
       game.pause();
       break;
+    case 72:
     case 37:
       game.left();
       break;
+    case 75:
     case 38:
       game.up();
       break;
+    case 76:
     case 39:
       game.right();
       break;
+    case 74:
     case 40:
       game.down();
       break;
